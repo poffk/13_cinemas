@@ -29,8 +29,8 @@ def is_arthouse(soup_film):
 
 def fetch_movie_info(movie_title):
     payload = {'first': 'yes', 'kp_query': '{}'.format(movie_title)}
-    request_to_kinopoisk = requests.get(KINOPOISK_SEARCH_URL, params=payload).content
-    return request_to_kinopoisk
+    raw_html = requests.get(KINOPOISK_SEARCH_URL, params=payload).content
+    return raw_html
 
 
 def parse_kinopoisk(raw_html, movie_title):
@@ -45,8 +45,7 @@ def parse_kinopoisk(raw_html, movie_title):
 def output_movies_to_console(movies):
     top_rating_films = sorted(movies, key=lambda movie: movie[1], reverse=True)
     for movie in top_rating_films[:TOP]:
-        print('Фильм {} имеет {} голосов со средней оценкой {}' \
-              .format(movie['movie_name'], movie['movie_rating'], movie['voters_amount']))
+        print('Фильм {} имеет {} голосов со средней оценкой {}'.format(**movie))
 
 
 if __name__ == '__main__':
@@ -54,6 +53,6 @@ if __name__ == '__main__':
     movies_info = []
     for movie in movies:
         kinopoisk_raw_html = fetch_movie_info(movie)
-        movies_info.append(pasre_kinopoisk(kinopoisk_raw_html, movie))
+        movies_info.append(parse_kinopoisk(kinopoisk_raw_html, movie))
         time.sleep(TIME_OF_TIMEOUT)
     output_movies_to_console(movies_info)
