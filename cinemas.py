@@ -43,9 +43,9 @@ def parse_kinopoisk(raw_html, movie_title):
 
 
 def output_movies_to_console(movies):
-    top_rating_films = sorted(movies, key=lambda movie: movie[1], reverse=True)
+    top_rating_films = sorted(movies, key=lambda movie: movie['movie_rating'], reverse=True)
     for movie in top_rating_films[:TOP]:
-        print('Фильм {} имеет {} голосов со средней оценкой {}'.format(**movie))
+        print('Фильм {movie_name} имеет {movie_rating} голосов со средней оценкой {voters_amount}'.format(**movie))
 
 
 if __name__ == '__main__':
